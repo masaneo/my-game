@@ -2678,6 +2678,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: {x: 5, y: 10}
   animator: {fileID: 1051213497}
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 1
   isGrounded: 0
 --- !u!95 &1051213497
 Animator:
