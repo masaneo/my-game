@@ -9,14 +9,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Platform
   - Water
   - UI
   - Player
   - Enemy
   - Trap
-  - 
-  - 
+  - Slope
+  - EnemyBoundary
   - 
   - 
   - 

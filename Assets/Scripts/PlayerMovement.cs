@@ -25,13 +25,6 @@ public class PlayerMovement : MonoBehaviour
     private PlayerState playerState = PlayerState.idle;
     
     private bool isGrounded = false;
-    
-    // Rigidbody2D RB;
-
-    // private void Awake()
-    // {
-    //     RB = GetComponent<Rigidbody2D>();
-    // }
 
     // Start is called before the first frame update
     void Start()
@@ -70,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (jump && playerState != PlayerState.jumping) {
-            Debug.Log("Height: " + spriteRenderer.sprite.bounds.size.x);
+            //Debug.Log("Height: " + spriteRenderer.sprite.bounds.size.x);
             playerState = PlayerState.jumping;
             velocity = new Vector2(velocity.x, jumpVelocity);
             animator.SetBool("IsJumping", true);
@@ -81,9 +74,13 @@ public class PlayerMovement : MonoBehaviour
             velocity.y -= gravity * Time.deltaTime;
         }
 
-        if(velocity.y < 0) {
+        if(velocity.y <= 0) {
             pos = CheckFloorRays(pos);
             animator.SetBool("IsJumping", false);
+        }
+
+        if(velocity.y >= 0) {
+            pos = CheckCeilingRays(pos);
         }
 
         transform.localPosition = pos;
@@ -120,9 +117,9 @@ public class PlayerMovement : MonoBehaviour
     }
 
     Vector3 CheckFloorRays (Vector3 pos) {
-        Vector2 originLeft = new Vector2(pos.x - 0.5f + 0.2f, pos.y - 0.5f);
-        Vector2 originMiddle = new Vector2(pos.x, pos.y - 0.5f);
-        Vector2 originRight = new Vector2(pos.x + 0.5f - 0.2f, pos.y - 0.5f);
+        Vector2 originLeft = new Vector2(pos.x - 0.5f + 0.2f, pos.y - 0.6f);
+        Vector2 originMiddle = new Vector2(pos.x, pos.y - 0.6f);
+        Vector2 originRight = new Vector2(pos.x + 0.5f - 0.2f, pos.y - 0.6f);
 
         RaycastHit2D floorLeft = Physics2D.Raycast(originLeft, Vector2.down, velocity.y * Time.deltaTime, floorMask);
         RaycastHit2D floorMiddle = Physics2D.Raycast(originMiddle, Vector2.down, velocity.y * Time.deltaTime, floorMask);
@@ -150,6 +147,33 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        return pos;
+    }
+
+    Vector3 CheckCeilingRays(Vector3 pos) {
+        Vector2 originLeft = new Vector2(pos.x - 0.5f + 0.2f, pos.y + .5f);
+        Vector2 originMiddle = new Vector2(pos.x, pos.y + .5f);
+        Vector2 originRight = new Vector2(pos.x + 0.5f - 0.2f, pos.y + .5f);
+
+        RaycastHit2D ceilLeft = Physics2D.Raycast(originLeft, Vector2.up, velocity.y * Time.deltaTime, floorMask);
+        RaycastHit2D ceilMiddle = Physics2D.Raycast(originMiddle, Vector2.up, velocity.y * Time.deltaTime, floorMask);
+        RaycastHit2D ceilRight = Physics2D.Raycast(originRight, Vector2.up, velocity.y * Time.deltaTime, floorMask);
+
+        if(ceilLeft.collider != null || ceilMiddle.collider != null || ceilRight.collider != null) {
+            RaycastHit2D hitRay = ceilLeft;
+
+            if(ceilLeft) {
+                hitRay = ceilLeft;
+            } else if(ceilMiddle) {
+                hitRay = ceilMiddle;
+            } else if(ceilRight) {
+                hitRay = ceilRight;
+            }
+
+            Debug.Log("Hit ceiling");
+            pos.y = hitRay.collider.bounds.center.y - hitRay.collider.bounds.size.y / 2 - 0.5f;
+            Fall();
+        }
         return pos;
     }
 
