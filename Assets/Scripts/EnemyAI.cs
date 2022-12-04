@@ -83,6 +83,10 @@ public class EnemyAI : MonoBehaviour
                 hitRay = groundRight;
             }
 
+            if(hitRay.collider.tag == "Player") {
+                Application.LoadLevel("Start Menu");
+            }
+
             pos.y = hitRay.collider.bounds.center.y + hitRay.collider.bounds.size.y / 2 + 0.5f;
 
             isGrounded = true;
@@ -115,6 +119,10 @@ public class EnemyAI : MonoBehaviour
                 hitRay = wallMiddle;
             } else if(wallBottom) {
                 hitRay = wallBottom;
+            }
+
+            if(hitRay.collider.tag == "Player") {
+                Application.LoadLevel("Start Menu");
             }
             
             isWalkingLeft = !isWalkingLeft;
