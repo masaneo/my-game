@@ -11,8 +11,10 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     public LayerMask wallMask;
     public LayerMask floorMask;
+    public GameObject voidFallDetector;
 
     private SpriteRenderer spriteRenderer;
+    private Vector3 spawnPoint;
 
     private bool walk, walkRight, walkLeft, jump;
 
@@ -30,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        spawnPoint = transform.position;
     }
 
     // Update is called once per frame
@@ -38,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
         CheckPlayerInput();
 
         UpdatePlayerPosition();  
+
     }
 
     private void UpdatePlayerPosition() {
@@ -79,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsJumping", false);
         }
 
-        if(velocity.y >= 0) {
+        if(velocity.y > 0) {
             pos = CheckCeilingRays(pos);
         }
 
@@ -135,12 +139,15 @@ public class PlayerMovement : MonoBehaviour
             } else if(floorRight) {
                 hitRay = floorRight;
             }
-            Debug.Log("Hit ground");
+            //Debug.Log("Hit ground");
             playerState = PlayerState.idle;
             isGrounded = true;
+            if(velocity.y > 0) {
+                pos.y = hitRay.collider.bounds.center.y + hitRay.collider.bounds.size.y / 2 + 0.5f;
+            }
             velocity.y = 0;
             
-            pos.y = hitRay.collider.bounds.center.y + hitRay.collider.bounds.size.y / 2 + 0.5f;
+            
         } else {
             if(playerState != PlayerState.jumping) {
                 Fall();
@@ -151,9 +158,9 @@ public class PlayerMovement : MonoBehaviour
     }
 
     Vector3 CheckCeilingRays(Vector3 pos) {
-        Vector2 originLeft = new Vector2(pos.x - 0.5f + 0.2f, pos.y + .5f);
-        Vector2 originMiddle = new Vector2(pos.x, pos.y + .5f);
-        Vector2 originRight = new Vector2(pos.x + 0.5f - 0.2f, pos.y + .5f);
+        Vector2 originLeft = new Vector2(pos.x - 0.5f + 0.2f, pos.y + 0.6f);
+        Vector2 originMiddle = new Vector2(pos.x, pos.y + 0.5f);
+        Vector2 originRight = new Vector2(pos.x + 0.5f - 0.2f, pos.y + 0.6f);
 
         RaycastHit2D ceilLeft = Physics2D.Raycast(originLeft, Vector2.up, velocity.y * Time.deltaTime, floorMask);
         RaycastHit2D ceilMiddle = Physics2D.Raycast(originMiddle, Vector2.up, velocity.y * Time.deltaTime, floorMask);
@@ -170,7 +177,7 @@ public class PlayerMovement : MonoBehaviour
                 hitRay = ceilRight;
             }
 
-            Debug.Log("Hit ceiling");
+            //Debug.Log("Hit ceiling");
             pos.y = hitRay.collider.bounds.center.y - hitRay.collider.bounds.size.y / 2 - 0.5f;
             Fall();
         }
@@ -181,5 +188,11 @@ public class PlayerMovement : MonoBehaviour
         velocity.y = 0;
         playerState = PlayerState.jumping;
         isGrounded = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.tag == "VoidFallDetector" || other.tag == "Spike") {
+            transform.position = spawnPoint;
+        }    
     }
 }

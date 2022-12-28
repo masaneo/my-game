@@ -9,6 +9,8 @@ public class EnemyAI : MonoBehaviour
     public bool isWalkingLeft = true;
     public LayerMask floorMask;
     public LayerMask wallMask;
+    public GameObject Player;
+    public Vector3 spawnPoint;
 
     private bool isGrounded = false;
 
@@ -83,10 +85,6 @@ public class EnemyAI : MonoBehaviour
                 hitRay = groundRight;
             }
 
-            if(hitRay.collider.tag == "Player") {
-                Application.LoadLevel("Start Menu");
-            }
-
             pos.y = hitRay.collider.bounds.center.y + hitRay.collider.bounds.size.y / 2 + 0.5f;
 
             isGrounded = true;
@@ -122,7 +120,7 @@ public class EnemyAI : MonoBehaviour
             }
 
             if(hitRay.collider.tag == "Player") {
-                Application.LoadLevel("Start Menu");
+                Player.transform.localPosition = spawnPoint;
             }
             
             isWalkingLeft = !isWalkingLeft;
