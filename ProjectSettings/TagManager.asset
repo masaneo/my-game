@@ -8,6 +8,7 @@ TagManager:
   - VoidFallDetector
   - Spike
   - Enemy
+  - Coin
   layers:
   - Default
   - TransparentFX
