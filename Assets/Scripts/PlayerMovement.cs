@@ -190,6 +190,7 @@ public class PlayerMovement : MonoBehaviour
     void Fall() {
         velocity.y = 0;
         playerState = PlayerState.jumping;
+        Debug.Log("Fall method");
         isGrounded = false;
     }
 

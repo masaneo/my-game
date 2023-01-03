@@ -31,7 +31,7 @@ public class CameraFollow : MonoBehaviour
     {
         if (target) {
             float targetX = Mathf.Max(levelMinX, Mathf.Min(levelMaxX, target.position.x));
-            float targetY = Mathf.Max(0, target.position.y);
+            float targetY = target.position.y;
 
             float x = Mathf.SmoothDamp(transform.position.x, targetX, ref SmoothDampVelocity.x, SmoothDampTime);
             float y = Mathf.SmoothDamp(transform.position.y, targetY, ref SmoothDampVelocity.y, SmoothDampTime);
