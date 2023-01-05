@@ -28,6 +28,5 @@ public class SetupCanvas : MonoBehaviour
 
     void UpdateHealthText() {
         healthCountText.text = "Health: " + playerScore.GetHealth();
-        Debug.Log("Health from setup canvca: " + playerScore.GetHealth());
     }
 }

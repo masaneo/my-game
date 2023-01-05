@@ -9,7 +9,11 @@ public class AudioPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        AudioListener.volume = PlayerPrefs.GetFloat("VolumeValue");
+        if(PlayerPrefs.HasKey("VolumeValue")) {
+            AudioListener.volume = PlayerPrefs.GetFloat("VolumeValue");
+        } else {
+            AudioListener.volume = 1.0f;
+        }
     }
 
     void Awake() {

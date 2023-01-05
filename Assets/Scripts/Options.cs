@@ -8,7 +8,7 @@ public class Options : MonoBehaviour
     [SerializeField] private Slider volumeSlider = null;
 
     void Start() {
-        volumeSlider.value = PlayerPrefs.GetFloat("VolumeValue");
+        volumeSlider.value = PlayerPrefs.GetFloat("VolumeValue", 1.0f);
     }
 
     public void VolumeSlider() {

@@ -12,6 +12,8 @@ public class EnemyAI : MonoBehaviour
     public GameObject Player;
     public Vector3 spawnPoint;
 
+    private PlayerScore playerScore;
+    private Player player;
     private bool isGrounded = false;
 
     private enum EnemyState {
@@ -25,6 +27,8 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerScore = FindObjectOfType<PlayerScore>();
+        player = FindObjectOfType<Player>();
         enabled = false;    
         Fall();
     }
@@ -121,6 +125,9 @@ public class EnemyAI : MonoBehaviour
 
             if(hitRay.collider.tag == "Player") {
                 Player.transform.localPosition = spawnPoint;
+                playerScore.DecreaseHealth();
+                player.CheckHealth();
+                player.UpdateHealth();
             }
             
             isWalkingLeft = !isWalkingLeft;

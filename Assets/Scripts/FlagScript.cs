@@ -18,7 +18,7 @@ public class FlagScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Player") {
-            if(itemCollector.coinCount == coinsOnLevel) {
+            if(itemCollector.coinCount >= coinsOnLevel) {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                 itemCollector.coinCount = 0;
             }

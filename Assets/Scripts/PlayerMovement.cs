@@ -13,12 +13,13 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask wallMask;
     public LayerMask floorMask;
     public GameObject voidFallDetector;
+    public AudioSource jumpSound;
 
     private SpriteRenderer spriteRenderer;
-
+    
     private bool walk, walkRight, walkLeft, jump;
 
-    public Player player; //player.cs to check health
+    public Player player;
 
     public enum PlayerState {
         jumping,
@@ -68,13 +69,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (jump && playerState != PlayerState.jumping) {
-            //Debug.Log("Height: " + spriteRenderer.sprite.bounds.size.x);
             playerState = PlayerState.jumping;
             velocity = new Vector2(velocity.x, jumpVelocity);
             animator.SetBool("IsJumping", true);
+            jumpSound.Play();
         }
 
-        if (playerState == PlayerState.jumping) {
+        //if (playerState == PlayerState.jumping) {
+        if(velocity.y > 0) {
             pos.y += velocity.y * Time.deltaTime;
             velocity.y -= gravity * Time.deltaTime;
         }
@@ -140,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
             } else if(floorRight) {
                 hitRay = floorRight;
             }
-            //Debug.Log("Hit ground");
+        
             playerState = PlayerState.idle;
             isGrounded = true;
             if(velocity.y > 0) {
@@ -178,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
                 hitRay = ceilRight;
             }
 
-            //Debug.Log("Hit ceiling");
+            
             pos.y = hitRay.collider.bounds.center.y - hitRay.collider.bounds.size.y / 2 - 0.5f;
             Fall();
         }

@@ -12,7 +12,7 @@ public class MoveWithPlatform : MonoBehaviour
         rbody = GetComponent<Rigidbody2D>();
     }
  
-    void FixedUpdate()
+    void Update()
     {
         if(isOnPlatform)
         {
