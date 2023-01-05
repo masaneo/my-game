@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour
     public GameObject voidFallDetector;
 
     private SpriteRenderer spriteRenderer;
-    private Vector3 spawnPoint;
 
     private bool walk, walkRight, walkLeft, jump;
 
@@ -35,7 +34,6 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spawnPoint = transform.position;
     }
 
     // Update is called once per frame
@@ -192,19 +190,5 @@ public class PlayerMovement : MonoBehaviour
         playerState = PlayerState.jumping;
         Debug.Log("Fall method");
         isGrounded = false;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "VoidFallDetector" || other.tag == "Spike") {
-            transform.position = spawnPoint;
-            player.health -= 1;
-            player.updateHealth();
-            player.checkHealth();        
-        }    
-        if(other.tag == "Heart") {
-            player.health += 1;
-            player.updateHealth();
-            Destroy(other.gameObject);
-        }
     }
 }

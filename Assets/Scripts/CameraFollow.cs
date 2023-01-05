@@ -7,6 +7,7 @@ public class CameraFollow : MonoBehaviour
     public Transform target;
     public Transform leftBounds;
     public Transform rightBounds;
+    public Transform background;
 
     public float SmoothDampTime = 0.1f;
 
@@ -37,6 +38,7 @@ public class CameraFollow : MonoBehaviour
             float y = Mathf.SmoothDamp(transform.position.y, targetY, ref SmoothDampVelocity.y, SmoothDampTime);
 
             transform.position = new Vector3(x, y, transform.position.z);
+            background.position = new Vector3(x, y, 0);
         }
     }
 }

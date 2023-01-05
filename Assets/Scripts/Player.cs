@@ -7,18 +7,55 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
-    public int health;
+    [SerializeField] private int health = 3;
     [SerializeField] private TextMeshProUGUI healthCountText;
+    private PlayerScore playerScore;
+    private Vector3 spawnPoint;
+    
 
-    void update() {
-
+    void Start() {
+        spawnPoint = transform.position;
+        playerScore = FindObjectOfType<PlayerScore>();
     }
+
+    public void SetHealth(int value) {
+        health = value;
+    }
+
+    public int GetHealth() {
+        return health;
+    }
+
+    public void IncreaseHealth() {
+        health += 1;
+    }
+
+    public void DecreaseHealth() {
+        health -= 1;
+    }
+
     public void checkHealth() {
-        if(health == 0) {
+        Debug.Log("Health: " + playerScore.GetHealth());
+        if(playerScore.GetHealth() == 0) {
             SceneManager.LoadScene(1);
         }
     }
     public void updateHealth() {
-        healthCountText.text = "Health: " + health;
+        healthCountText.text = "Health: " + playerScore.GetHealth();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.tag == "VoidFallDetector" || other.tag == "Spike") {
+            transform.position = spawnPoint;
+            Debug.Log("Death by" + other.tag);
+            playerScore.DecreaseHealth();
+            updateHealth();
+            checkHealth();        
+        }    
+        if(other.tag == "Heart") {
+            playerScore.IncreaseHealth();
+            updateHealth();
+            Destroy(other.gameObject);
+        }
     }
 }
